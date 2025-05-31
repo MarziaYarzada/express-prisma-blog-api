@@ -1,10 +1,11 @@
 import { Request, response, Response } from "express";
 import { loginUser, registerUser } from "../services/user.service";
 import { generateToken } from "../utils/jwt.token";
+import { RegisterInput, LoginInput } from "../types/user.types";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password } = req.body as RegisterInput;
     const user = await registerUser(name, email, password);
     res.status(201).json({
       message: "New user created successfully!",
@@ -20,7 +21,7 @@ export const register = async (req: Request, res: Response) => {
 };
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body as LoginInput;
     const user = await loginUser(email, password);
     const token = generateToken(user.id);
     res.status(200).json({ message: "Login successful", token });
